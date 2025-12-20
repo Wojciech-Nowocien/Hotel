@@ -1,11 +1,13 @@
 package events;
 
+import events.enums.availability.AvailabilityImpact;
+import events.enums.availability.AvailabilityRequirement;
 import model.Admin;
 import model.Client;
 import model.Room;
 import model.User;
 
-public class Event {
+public abstract class Event {
     private final Room room;
     private final User user;
 
@@ -29,4 +31,8 @@ public class Event {
     public boolean isExecutorAdmin() {
         return user instanceof Admin;
     }
+
+    abstract AvailabilityImpact getStatus();
+
+    abstract AvailabilityRequirement getRequirement();
 }
