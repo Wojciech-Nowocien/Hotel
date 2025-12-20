@@ -32,7 +32,7 @@ public abstract class Event {
         return user instanceof Admin;
     }
 
-    abstract AvailabilityImpact getStatus();
+    abstract AvailabilityImpact getStatusImpact();
 
     abstract AvailabilityRequirement getRequirement();
 }

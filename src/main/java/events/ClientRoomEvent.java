@@ -24,7 +24,7 @@ public class ClientRoomEvent extends Event{
     }
 
     @Override
-    AvailabilityImpact getStatus() {
+    AvailabilityImpact getStatusImpact() {
         return impact;
     }
 

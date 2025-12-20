@@ -24,7 +24,7 @@ public class AdminEvent extends Event {
     }
 
     @Override
-    AvailabilityImpact getStatus() {
+    AvailabilityImpact getStatusImpact() {
         return impact;
     }
 
