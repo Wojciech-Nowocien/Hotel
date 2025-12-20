@@ -1,6 +1,8 @@
 package events;
 
 import events.enums.PaymentMethod;
+import events.enums.availability.AvailabilityImpact;
+import events.enums.availability.AvailabilityRequirement;
 import model.Client;
 import model.Room;
 
@@ -14,5 +16,15 @@ public class Payment extends Event{
 
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
+    }
+
+    @Override
+    AvailabilityImpact getStatus() {
+        return AvailabilityImpact.NONE;
+    }
+
+    @Override
+    AvailabilityRequirement getRequirement() {
+        return AvailabilityRequirement.REQUIRE_UNAVAILABLE; // you must book/visit a room to pay for them
     }
 }
