@@ -19,7 +19,7 @@ public class Payment extends Event{
     }
 
     @Override
-    AvailabilityImpact getStatusImpact() {
+    public AvailabilityImpact getStatusImpact() {
         return AvailabilityImpact.NONE;
     }
 

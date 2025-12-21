@@ -41,7 +41,7 @@ public abstract class Event {
         };
     }
 
-    abstract AvailabilityImpact getStatusImpact();
+    public abstract AvailabilityImpact getStatusImpact();
 
     protected abstract AvailabilityRequirement getRequirement();
 }
