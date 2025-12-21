@@ -13,6 +13,14 @@ public class EventManager {
         events = new ArrayList<>();
     }
 
+    public boolean add(Event event) {
+        Status status = getLastStatus(event.getRoom());
+
+        if (!event.canBeAppliedFor(status)) return false;
+
+        return events.add(event);
+    }
+
     private Status getLastStatus(Room room) {
         Event event = events.stream().filter(e ->
                 e.getStatusImpact() != AvailabilityImpact.NONE && e.getRoom().equals(room)
