@@ -43,5 +43,5 @@ public abstract class Event {
 
     abstract AvailabilityImpact getStatusImpact();
 
-    abstract AvailabilityRequirement getRequirement();
+    protected abstract AvailabilityRequirement getRequirement();
 }

@@ -29,7 +29,7 @@ public class ClientRoomEvent extends Event{
     }
 
     @Override
-    AvailabilityRequirement getRequirement() {
+    protected AvailabilityRequirement getRequirement() {
         return requirement;
     }
 }
