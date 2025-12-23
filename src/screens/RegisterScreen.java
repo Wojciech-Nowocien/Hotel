@@ -1,13 +1,11 @@
 package screens;
 
 import managers.UserManager;
-import model.Hotel;
 
 public class RegisterScreen extends Screen {
     private final UserManager users;
 
-    public RegisterScreen(Hotel hotel) {
-        super(hotel);
+    public RegisterScreen() {
         this.users = hotel.getUsers();
     }
 

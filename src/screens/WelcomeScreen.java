@@ -1,11 +1,6 @@
 package screens;
 
-import model.Hotel;
-
-public class WelcomeScreen extends Screen{
-    public WelcomeScreen(Hotel hotel) {
-        super(hotel);
-    }
+public class WelcomeScreen extends Screen {
 
     @Override
     public void render() {
@@ -13,9 +8,9 @@ public class WelcomeScreen extends Screen{
         System.out.println("Napisz 1, aby się zalogować.");
         System.out.println("Napisz 2, aby się zarejestrować.");
         System.out.println("Napisz 3, aby zamknąć program.");
-        switch (INPUT.nextInt()){
-            case 1 -> changeScreen(new LoginScreen(hotel));
-            case 2 -> changeScreen(new RegisterScreen(hotel));
+        switch (INPUT.nextInt()) {
+            case 1 -> changeScreen(new LoginScreen());
+            case 2 -> changeScreen(new RegisterScreen());
             case 3 -> System.exit(0);
         }
     }

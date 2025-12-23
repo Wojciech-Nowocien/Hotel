@@ -11,6 +11,10 @@ public abstract class Screen {
         this.hotel = hotel;
     }
 
+    public Screen(){
+        this.hotel = Hotel.HOTEL;
+    }
+
     void changeScreen(Screen screen){
         hotel.setScreen(screen);
     }

@@ -7,6 +7,8 @@ import screens.Screen;
 import java.util.ArrayList;
 
 public class Hotel {
+    public static final Hotel HOTEL = new Hotel();
+
     private final EventManager events;
     private final ArrayList<Room> rooms;
     private final UserManager users;
