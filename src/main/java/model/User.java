@@ -14,6 +14,10 @@ public class User {
         this.passwordHash = hash(password);
     }
 
+    public String getLogin() {
+        return login;
+    }
+
     private String hash(String text) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
