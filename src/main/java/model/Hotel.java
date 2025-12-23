@@ -12,11 +12,11 @@ public class Hotel {
     private final UserManager users;
     private Screen screen;
 
-    public Hotel(Screen screen) {
+    public Hotel() {
         events = new EventManager();
         rooms = new ArrayList<>();
         users = new UserManager();
-        this.screen = screen;
+        this.screen = null;
     }
 
     public EventManager getEvents() {
@@ -36,12 +36,16 @@ public class Hotel {
     }
 
     public void setScreen(Screen screen) {
-        this.screen = screen;
+        if (screen != null) {
+            this.screen = screen;
+        }
     }
 
-    public void render() {
+    public void render(Screen screen) {
+        this.screen = screen;
         while (true) {
-            screen.render();
+            this.screen.render();
         }
     }
 }
+
