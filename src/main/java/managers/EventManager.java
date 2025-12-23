@@ -1,5 +1,6 @@
-package events;
+package managers;
 
+import events.Event;
 import events.enums.availability.AvailabilityImpact;
 import events.enums.availability.Status;
 import model.Room;
