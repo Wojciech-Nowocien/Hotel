@@ -34,13 +34,14 @@ public class LoginScreen extends Screen {
                 changeScreen(new ClientScreen());
             }
         } catch (LoginNotFoundException loginException) {
-            System.out.println("Błąd: użytkownik o podanym loginie nie istnieje!");
+            System.out.println("\nBłąd: użytkownik o podanym loginie nie istnieje!");
             System.out.println("To może być Twój błąd, lub takie konto wogule nie istnieje.");
             System.out.println("Jeśli jesteś klientem, może spróbuj się zarejestrować?");
-            System.out.println("Jeśli jesteś administratorem skontaktuj się z innym z nich. Być może źle wprowadził Twój login?");
+            System.out.print("Jeśli jesteś administratorem skontaktuj się z innym z nich. ");
+            System.out.println("Być może źle wprowadził Twój login?\n");
             changeScreen(new WelcomeScreen());
         } catch (InvalidPasswordException passwordException) {
-            System.out.println("Błąd: niepoprawne hasło dla użytkownika " + login + "!");
+            System.out.println("\nBłąd: niepoprawne hasło dla użytkownika " + login + "!\n");
             changeScreen(new WelcomeScreen());
         }
     }
