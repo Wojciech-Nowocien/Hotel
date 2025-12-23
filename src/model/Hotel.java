@@ -33,10 +33,6 @@ public class Hotel {
         return users;
     }
 
-    public Screen getScreen() {
-        return screen;
-    }
-
     public void setScreen(Screen screen) {
         if (screen != null) {
             this.screen = screen;
