@@ -1,8 +1,9 @@
 package model;
 
-public class Client extends User {
+import exceptions.EmptyPasswordException;
 
-    public Client(String login, String password) {
+public class Client extends User {
+    public Client(String login, String password) throws EmptyPasswordException {
         super(login, password);
     }
 }

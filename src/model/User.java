@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.EmptyPasswordException;
+
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -9,8 +11,9 @@ public class User {
     private final String login;
     private final String passwordHash;
 
-    public User(String login, String password) {
+    public User(String login, String password) throws EmptyPasswordException {
         this.login = login;
+        if (password.isEmpty()) throw new EmptyPasswordException();
         this.passwordHash = hash(password);
     }
 
