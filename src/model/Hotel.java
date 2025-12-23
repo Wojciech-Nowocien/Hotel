@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.DuplicateLoginException;
 import managers.EventManager;
 import managers.UserManager;
 import screens.Screen;
@@ -37,6 +38,10 @@ public class Hotel {
         if (screen != null) {
             this.screen = screen;
         }
+    }
+
+    public void addUser(User user) throws DuplicateLoginException {
+        users.add(user);
     }
 
     public void render(Screen screen) {
