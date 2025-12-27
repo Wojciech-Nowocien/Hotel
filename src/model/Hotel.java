@@ -66,9 +66,14 @@ public class Hotel {
     }
 
     public void startRenovation(int number) throws InvalidRoomNumberException, InvalidStatusException,
-            StartRenovationException {
+            RenovationException {
         Room room = rooms.getRoomByNumber(number);
         events.startRenovation(room, new Admin(getCurrentUser()));
+    }
+
+    public void endRenovation(int number) throws InvalidRoomNumberException, RenovationException {
+        Room room = rooms.getRoomByNumber(number);
+        events.endRenovation(room, new Admin(getCurrentUser()));
     }
 
     public void render(Screen screen) {

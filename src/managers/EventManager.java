@@ -7,7 +7,7 @@ import events.enums.availability.AvailabilityImpact;
 import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import exceptions.InvalidStatusException;
-import exceptions.StartRenovationException;
+import exceptions.RenovationException;
 import model.Admin;
 import model.Room;
 
@@ -71,7 +71,7 @@ public class EventManager {
         }
     }
 
-    public void startRenovation(Room room, Admin admin) throws InvalidStatusException, StartRenovationException {
+    public void startRenovation(Room room, Admin admin) throws InvalidStatusException, RenovationException {
         var roomRenovations = getRoomRenovationEvents(room);
 
         AdminEvent renovation = new AdminEvent(room, admin, AdminEventType.START_RENOVATION,
@@ -82,9 +82,22 @@ public class EventManager {
             return;
         }
         if (((AdminEvent) roomRenovations.getLast()).getType() == AdminEventType.START_RENOVATION) {
-            throw new StartRenovationException();
+            throw new RenovationException();
         }
 
         add(renovation);
+    }
+
+    public void endRenovation(Room room, Admin admin) throws RenovationException {
+        var roomRenovations = getRoomRenovationEvents(room);
+
+        AdminEvent renovation = new AdminEvent(room, admin, AdminEventType.END_RENOVATION,
+                AvailabilityImpact.AVAILABLE, AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+
+        if (roomRenovations.isEmpty() || ((AdminEvent) roomRenovations.getLast()).getType() == AdminEventType.END_RENOVATION) {
+            throw new RenovationException();
+        }
+
+        events.add(renovation);
     }
 }

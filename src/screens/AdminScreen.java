@@ -3,7 +3,7 @@ package screens;
 import events.Event;
 import exceptions.InvalidRoomNumberException;
 import exceptions.InvalidStatusException;
-import exceptions.StartRenovationException;
+import exceptions.RenovationException;
 import model.Room;
 import model.RoomType;
 
@@ -87,6 +87,7 @@ public class AdminScreen extends Screen {
             System.out.println("Napisz 1, żeby powrócić do panelu administratora");
             System.out.println("Napisz 2, żeby posprzątać pokój");
             System.out.println("Napisz 3, żeby rozpocząć remont pokoju.");
+            System.out.println("Napisz 4, żeby zakończyć remont w pokoju.");
             switch (INPUT.nextInt()) {
                 case 1 -> shouldContinue = false;
                 case 2 -> {
@@ -96,6 +97,10 @@ public class AdminScreen extends Screen {
                 case 3 -> {
                     System.out.println("Podaj numer pokoju, który chcesz wyremontować:");
                     startRenovation(INPUT.nextInt());
+                }
+                case 4 ->{
+                    System.out.println("Podaj numer pokoju, w którym remont ma się zakończyć:");
+                    endRenovation(INPUT.nextInt());
                 }
             }
         }
@@ -116,13 +121,25 @@ public class AdminScreen extends Screen {
             System.out.println("\nPomyślnie rozpoczęto remont w pokoju numer " + number + ".\n");
         } catch (InvalidRoomNumberException e) {
             handleInvalidRoomNumberException();
-        } catch (StartRenovationException e) {
+        } catch (RenovationException e) {
             System.out.println("\nBłąd: we wskazanym pokoju remont już trwa!");
             System.out.println("Aby rozpocząć kolejny musisz zakończyć istniejący.\n");
         } catch (InvalidStatusException e) {
             System.out.println("\nBłąd: wskazany pokój jest niedostępny!");
             System.out.println("Bardzo możliwe, że ktoś w nim jest lub go zarezerwował.");
             System.out.println("Zobacz historię tego pokoju (opcja nr. 3 w panelu administratora), aby poznać szczegóły\n");
+        }
+    }
+
+    private void endRenovation(int number) {
+        try {
+            hotel.endRenovation(number);
+            System.out.println("\nPomyślnie zakończono remont w pokoju numer " + number + ".\n");
+        } catch (InvalidRoomNumberException e) {
+            handleInvalidRoomNumberException();
+        } catch (RenovationException e) {
+            System.out.println("\nBłąd: we wskazanym pokoju nie ma żadnego remontu!");
+            System.out.println("Aby zakończyć remont musisz go najpierw rozpocząć.\n");
         }
     }
 }
