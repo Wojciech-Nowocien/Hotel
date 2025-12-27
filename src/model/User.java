@@ -21,6 +21,11 @@ public class User {
         return login;
     }
 
+    @Override
+    public String toString() {
+        return login;
+    }
+
     private String hash(String text) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
