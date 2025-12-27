@@ -16,13 +16,15 @@ public class RoomManager {
         return rooms;
     }
 
-    public void add(RoomType type) {
+    public Room add(RoomType type) {
         int number = 1;
 
         if (!rooms.isEmpty()) {
             number = rooms.getLast().getNumber() + 1;
         }
 
-        rooms.add(new Room(number, type));
+        Room room = new Room(number, type);
+        rooms.add(room);
+        return room;
     }
 }
