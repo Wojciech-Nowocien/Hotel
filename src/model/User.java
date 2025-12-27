@@ -17,6 +17,11 @@ public class User {
         this.passwordHash = hash(password);
     }
 
+    public User(User other) {
+        this.login = other.login;
+        this.passwordHash = other.passwordHash;
+    }
+
     public String getLogin() {
         return login;
     }
