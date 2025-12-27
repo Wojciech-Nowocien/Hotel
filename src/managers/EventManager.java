@@ -7,6 +7,7 @@ import events.enums.availability.AvailabilityImpact;
 import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import exceptions.InvalidStatusException;
+import exceptions.StartRenovationException;
 import model.Admin;
 import model.Room;
 
@@ -26,6 +27,16 @@ public class EventManager {
         if (!event.canBeAppliedFor(status)) throw new InvalidStatusException(status, event.getRequirement());
 
         events.add(event);
+    }
+
+    private List<Event> getRoomRenovationEvents(Room room) {
+        return events.stream().filter(e ->
+                        e.getRoom() == room
+                                && e.isExecutorAdmin()
+                                && e instanceof AdminEvent
+                                && (((AdminEvent) e).getType() == AdminEventType.START_RENOVATION
+                                || ((AdminEvent) e).getType() == AdminEventType.END_RENOVATION))
+                .toList();
     }
 
     public Status getLastStatus(Room room) {
@@ -58,5 +69,22 @@ public class EventManager {
             // never happens because of AvailabilityRequirement.NONE
             throw new RuntimeException(e);
         }
+    }
+
+    public void startRenovation(Room room, Admin admin) throws InvalidStatusException, StartRenovationException {
+        var roomRenovations = getRoomRenovationEvents(room);
+
+        AdminEvent renovation = new AdminEvent(room, admin, AdminEventType.START_RENOVATION,
+                AvailabilityImpact.UNAVAILABLE, AvailabilityRequirement.REQUIRE_AVAILABLE);
+
+        if (roomRenovations.isEmpty()) {
+            add(renovation);
+            return;
+        }
+        if (((AdminEvent) roomRenovations.getLast()).getType() == AdminEventType.START_RENOVATION) {
+            throw new StartRenovationException();
+        }
+
+        add(renovation);
     }
 }

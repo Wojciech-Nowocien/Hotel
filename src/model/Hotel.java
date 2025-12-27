@@ -65,6 +65,12 @@ public class Hotel {
         events.clean(room, new Admin(getCurrentUser()));
     }
 
+    public void startRenovation(int number) throws InvalidRoomNumberException, InvalidStatusException,
+            StartRenovationException {
+        Room room = rooms.getRoomByNumber(number);
+        events.startRenovation(room, new Admin(getCurrentUser()));
+    }
+
     public void render(Screen screen) {
         this.screen = screen;
         while (true) {
