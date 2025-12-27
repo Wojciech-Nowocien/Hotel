@@ -1,17 +1,26 @@
 package screens;
 
+import events.Event;
+import exceptions.InvalidRoomNumberException;
 import model.Room;
 import model.RoomType;
 
+import java.util.List;
+
 public class AdminScreen extends Screen {
+    private int number;
+    private List<Event> events;
+
     @Override
     public void render() {
         System.out.println("Panel administratora\n");
         System.out.println("Napisz 1, aby dodać nowy pokój.");
         System.out.println("Napisz 2, aby wyświetlić wszystkie pokoje.");
+        System.out.println("Napisz 3, aby wyświetlić historię danego pokoju.");
         switch (INPUT.nextInt()) {
             case 1 -> addRoom();
             case 2 -> showAllRooms();
+            case 3 -> showRoomHistory();
         }
     }
 
@@ -41,5 +50,24 @@ public class AdminScreen extends Screen {
             System.out.println(r.getNumber() + "\t\t\t\t" + r.getType() + "\t\t\t" + hotel.getLastStatus(r));
         }
         System.out.println();
+    }
+
+    private void showRoomHistory() {
+        System.out.println("Podaj numer pokoju:");
+        number = INPUT.nextInt();
+        try {
+            events = hotel.getEventsByRoomNumber(number);
+            if (!events.isEmpty()) {
+                System.out.println("Nazwa\t\t\tWykonawca\t\tRola wyk.\t\t\tNr. pokoju\t\t\tTyp pokoju\t\t\tDodatkowe informacje");
+                for (Event event : events) {
+                    System.out.println(event);
+                }
+            } else {
+                System.out.println("Historia tego pokoju jest pusta.");
+            }
+        } catch (InvalidRoomNumberException e) {
+            System.out.println("\nBłąd: Pokój o wskazanym numerze nie istnieje!");
+            System.out.println("Aby zobaczyć istniejące pokoje wybierz opcję 2 w panelu administratora.\n");
+        }
     }
 }

@@ -1,8 +1,10 @@
 package model;
 
+import events.Event;
 import events.enums.availability.Status;
 import exceptions.DuplicateLoginException;
 import exceptions.InvalidPasswordException;
+import exceptions.InvalidRoomNumberException;
 import exceptions.LoginNotFoundException;
 import managers.EventManager;
 import managers.RoomManager;
@@ -52,8 +54,13 @@ public class Hotel {
         users.login(login, password);
     }
 
-    public Status getLastStatus(Room room){
+    public Status getLastStatus(Room room) {
         return events.getLastStatus(room);
+    }
+
+    public List<Event> getEventsByRoomNumber(int number) throws InvalidRoomNumberException {
+        rooms.validate(number);
+        return events.getEventsByRoomNumber(number);
     }
 
     public void render(Screen screen) {

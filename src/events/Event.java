@@ -46,4 +46,19 @@ public abstract class Event {
     protected abstract AvailabilityRequirement getRequirement();
 
     public abstract String getMessage();
+
+    @Override
+    public String toString() {
+        String message = getMessage() + "\t\t\t" + user + "\t\t\t";
+
+        if (isExecutorAdmin()) {
+            message += "administrator";
+        } else {
+            message += "gość";
+        }
+
+        message += "\t\t\t" + room.getNumber() + "\t\t\t" + room.getType();
+
+        return message;
+    }
 }
