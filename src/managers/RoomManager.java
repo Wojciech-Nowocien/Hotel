@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.InvalidRoomNumberException;
 import model.Room;
 import model.RoomType;
 
@@ -26,5 +27,10 @@ public class RoomManager {
         Room room = new Room(number, type);
         rooms.add(room);
         return room;
+    }
+
+    public void validate(int number) throws InvalidRoomNumberException {
+        if (rooms.stream().filter(r -> r.getNumber() == number).toList().isEmpty())
+            throw new InvalidRoomNumberException();
     }
 }
