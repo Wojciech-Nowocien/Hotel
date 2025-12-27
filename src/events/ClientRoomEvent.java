@@ -32,4 +32,14 @@ public class ClientRoomEvent extends Event{
     protected AvailabilityRequirement getRequirement() {
         return requirement;
     }
+
+    @Override
+    public String getMessage() {
+        return switch (type){
+            case BOOK -> "zarezerwowano";
+            case ARRIVE -> "zameldowano";
+            case LEAVE -> "wymeldowano";
+            case CANCEL -> "anulowano rezerwację";
+        };
+    }
 }

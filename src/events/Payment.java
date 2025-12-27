@@ -27,4 +27,9 @@ public class Payment extends Event{
     protected AvailabilityRequirement getRequirement() {
         return AvailabilityRequirement.REQUIRE_UNAVAILABLE; // you must book/visit a room to pay for them
     }
+
+    @Override
+    public String getMessage() {
+        return "opłacono";
+    }
 }

@@ -32,4 +32,13 @@ public class AdminEvent extends Event {
     protected AvailabilityRequirement getRequirement() {
         return requirement;
     }
+
+    @Override
+    public String getMessage() {
+        return switch (type){
+            case CLEAN -> "posprzątano";
+            case START_RENOVATION -> "rozpoczęto remont";
+            case END_RENOVATION -> "zakończono remont";
+        };
+    }
 }
