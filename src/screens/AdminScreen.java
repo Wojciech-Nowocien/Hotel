@@ -1,19 +1,9 @@
 package screens;
 
-import managers.EventManager;
-import managers.RoomManager;
 import model.Room;
 import model.RoomType;
 
 public class AdminScreen extends Screen {
-    private final RoomManager rooms;
-    private final EventManager events;
-
-    public AdminScreen() {
-        this.rooms = hotel.getRooms();
-        this.events = hotel.getEvents();
-    }
-
     @Override
     public void render() {
         System.out.println("Panel administratora\n");
@@ -31,7 +21,7 @@ public class AdminScreen extends Screen {
         System.out.println("Podaj rodzaj pokoju (wielkość liter nie ma znaczenia):");
         try {
             RoomType type = RoomType.valueOf(INPUT.nextLine().toUpperCase());
-            Room r = rooms.add(type);
+            Room r = hotel.add(type);
             System.out.println("Nowy pokój typu " + r.getType() + " jest dostępny pod numerem " + r.getNumber() + ".\n");
         } catch (IllegalArgumentException e) {
             System.out.println("\nBłąd: Niepoprawny rodzaj pokoju!\n");
@@ -39,7 +29,7 @@ public class AdminScreen extends Screen {
     }
 
     private void showAllRooms() {
-        if (rooms.getRooms().isEmpty()){
+        if (hotel.getRooms().isEmpty()) {
             System.out.println("Obecnie hotel nie ma żadnych pokoi!\n");
             return;
         }
@@ -47,8 +37,8 @@ public class AdminScreen extends Screen {
         System.out.println("Lista pokoi:");
 
         System.out.println("Nr\t\t\t\tTyp\t\t\t\t\tStatus");
-        for (Room r : rooms.getRooms()) {
-            System.out.println(r.getNumber() + "\t\t\t\t" + r.getType() + "\t\t\t" + events.getLastStatus(r));
+        for (Room r : hotel.getRooms()) {
+            System.out.println(r.getNumber() + "\t\t\t\t" + r.getType() + "\t\t\t" + hotel.getLastStatus(r));
         }
         System.out.println();
     }

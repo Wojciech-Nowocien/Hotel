@@ -2,16 +2,13 @@ package screens;
 
 import exceptions.DuplicateLoginException;
 import exceptions.EmptyPasswordException;
-import managers.UserManager;
 import model.Client;
 
 public class RegisterScreen extends Screen {
-    private final UserManager users;
     private String login;
     private String password;
 
     public RegisterScreen() {
-        this.users = hotel.getUsers();
         login = "";
         password = "";
     }
@@ -27,7 +24,7 @@ public class RegisterScreen extends Screen {
         password = INPUT.nextLine();
 
         try {
-            users.add(new Client(login, password));
+            hotel.add(new Client(login, password));
             System.out.println("\nPomyślnie utworzono konto. Możesz się teraz do niego zalogować.\n");
         } catch (DuplicateLoginException duplicateException) {
             System.out.println("\nBłąd: Twój login jest już zajęty!");

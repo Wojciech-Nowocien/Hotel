@@ -1,10 +1,15 @@
 package model;
 
+import events.enums.availability.Status;
 import exceptions.DuplicateLoginException;
+import exceptions.InvalidPasswordException;
+import exceptions.LoginNotFoundException;
 import managers.EventManager;
 import managers.RoomManager;
 import managers.UserManager;
 import screens.Screen;
+
+import java.util.List;
 
 public class Hotel {
     public static final Hotel HOTEL = new Hotel();
@@ -21,16 +26,8 @@ public class Hotel {
         this.screen = null;
     }
 
-    public EventManager getEvents() {
-        return events;
-    }
-
-    public RoomManager getRooms() {
-        return rooms;
-    }
-
-    public UserManager getUsers() {
-        return users;
+    public List<Room> getRooms() {
+        return rooms.getRooms();
     }
 
     public void setScreen(Screen screen) {
@@ -39,8 +36,24 @@ public class Hotel {
         }
     }
 
-    public void addUser(User user) throws DuplicateLoginException {
+    public void add(User user) throws DuplicateLoginException {
         users.add(user);
+    }
+
+    public Room add(RoomType type) {
+        return rooms.add(type);
+    }
+
+    public User getCurrentUser() {
+        return users.getCurrentUser();
+    }
+
+    public void login(String login, String password) throws LoginNotFoundException, InvalidPasswordException {
+        users.login(login, password);
+    }
+
+    public Status getLastStatus(Room room){
+        return events.getLastStatus(room);
     }
 
     public void render(Screen screen) {

@@ -2,16 +2,13 @@ package screens;
 
 import exceptions.InvalidPasswordException;
 import exceptions.LoginNotFoundException;
-import managers.UserManager;
 import model.Admin;
 
 public class LoginScreen extends Screen {
-    private final UserManager users;
     private String login;
     private String password;
 
     public LoginScreen() {
-        this.users = hotel.getUsers();
         login = "";
         password = "";
     }
@@ -25,8 +22,8 @@ public class LoginScreen extends Screen {
         password = INPUT.nextLine();
 
         try {
-            users.login(login, password);
-            if (users.getCurrentUser() instanceof Admin) {
+            hotel.login(login, password);
+            if (hotel.getCurrentUser() instanceof Admin) {
                 System.out.println("\nZalogowano pomyślnie jako administrator. Przenoszenie do panelu administratora...\n");
                 changeScreen(new AdminScreen());
             } else {
