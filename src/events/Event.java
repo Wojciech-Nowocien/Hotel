@@ -43,7 +43,7 @@ public abstract class Event {
 
     public abstract AvailabilityImpact getStatusImpact();
 
-    protected abstract AvailabilityRequirement getRequirement();
+    public abstract AvailabilityRequirement getRequirement();
 
     public abstract String getMessage();
 

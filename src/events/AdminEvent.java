@@ -29,7 +29,7 @@ public class AdminEvent extends Event {
     }
 
     @Override
-    protected AvailabilityRequirement getRequirement() {
+    public AvailabilityRequirement getRequirement() {
         return requirement;
     }
 

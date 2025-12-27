@@ -3,6 +3,7 @@ package managers;
 import events.Event;
 import events.enums.availability.AvailabilityImpact;
 import events.enums.availability.Status;
+import exceptions.InvalidStatusException;
 import model.Room;
 
 import java.util.ArrayList;
@@ -15,12 +16,12 @@ public class EventManager {
         events = new ArrayList<>();
     }
 
-    public boolean add(Event event) {
+    public void add(Event event) throws InvalidStatusException{
         Status status = getLastStatus(event.getRoom());
 
-        if (!event.canBeAppliedFor(status)) return false;
+        if (!event.canBeAppliedFor(status)) throw new InvalidStatusException(status, event.getRequirement());
 
-        return events.add(event);
+        events.add(event);
     }
 
     public Status getLastStatus(Room room) {
