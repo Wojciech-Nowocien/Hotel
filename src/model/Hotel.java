@@ -2,22 +2,21 @@ package model;
 
 import exceptions.DuplicateLoginException;
 import managers.EventManager;
+import managers.RoomManager;
 import managers.UserManager;
 import screens.Screen;
-
-import java.util.ArrayList;
 
 public class Hotel {
     public static final Hotel HOTEL = new Hotel();
 
     private final EventManager events;
-    private final ArrayList<Room> rooms;
+    private final RoomManager rooms;
     private final UserManager users;
     private Screen screen;
 
     public Hotel() {
         events = new EventManager();
-        rooms = new ArrayList<>();
+        rooms = new RoomManager();
         users = new UserManager();
         this.screen = null;
     }
@@ -26,7 +25,7 @@ public class Hotel {
         return events;
     }
 
-    public ArrayList<Room> getRooms() {
+    public RoomManager getRooms() {
         return rooms;
     }
 
