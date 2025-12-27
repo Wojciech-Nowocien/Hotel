@@ -22,12 +22,16 @@ public class EventManager {
         return events.add(event);
     }
 
-    private Status getLastStatus(Room room) {
-        Event event = events.stream().filter(e ->
+    public Status getLastStatus(Room room) {
+        var roomEvents = events.stream().filter(e ->
                 e.getStatusImpact() != AvailabilityImpact.NONE && e.getRoom().equals(room)
-        ).toList().getLast();
+        ).toList();
 
-        if (event.getStatusImpact() == AvailabilityImpact.AVAILABLE) {
+        if (roomEvents.isEmpty()){
+            return Status.AVAILABLE;
+        }
+
+        if (roomEvents.getLast().getStatusImpact() == AvailabilityImpact.AVAILABLE) {
             return Status.AVAILABLE;
         } else {
             return Status.UNAVAILABLE;
