@@ -3,5 +3,10 @@ package model;
 public enum RoomType {
     SINGLE,
     DOUBLE,
-    APARTMENT
+    APARTMENT;
+
+    @Override
+    public String toString() {
+        return super.toString().toLowerCase();
+    }
 }
