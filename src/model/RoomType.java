@@ -7,6 +7,10 @@ public enum RoomType {
 
     @Override
     public String toString() {
-        return super.toString().toLowerCase();
+        return switch (this){
+            case SINGLE -> "pojedynczy";
+            case DOUBLE -> "podwójny";
+            case APARTMENT -> "apartament";
+        };
     }
 }
