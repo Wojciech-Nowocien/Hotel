@@ -6,6 +6,7 @@ import events.enums.availability.Status;
 import model.Room;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventManager {
     private final ArrayList<Event> events;
@@ -27,7 +28,7 @@ public class EventManager {
                 e.getStatusImpact() != AvailabilityImpact.NONE && e.getRoom().equals(room)
         ).toList();
 
-        if (roomEvents.isEmpty()){
+        if (roomEvents.isEmpty()) {
             return Status.AVAILABLE;
         }
 
@@ -36,5 +37,9 @@ public class EventManager {
         } else {
             return Status.UNAVAILABLE;
         }
+    }
+
+    public List<Event> getEventsByRoomNumber(int number) {
+        return events.stream().filter(e -> e.getRoom().getNumber() == number).toList();
     }
 }
