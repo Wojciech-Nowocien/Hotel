@@ -1,10 +1,6 @@
 package model;
 
-import events.AdminEvent;
 import events.Event;
-import events.enums.AdminEventType;
-import events.enums.availability.AvailabilityImpact;
-import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import exceptions.*;
 import managers.EventManager;
@@ -66,15 +62,7 @@ public class Hotel {
 
     public void clean(int number) throws InvalidRoomNumberException {
         Room room = rooms.getRoomByNumber(number);
-        AdminEvent clean = new AdminEvent(room, new Admin(getCurrentUser()), AdminEventType.CLEAN,
-                AvailabilityImpact.NONE, AvailabilityRequirement.NONE);
-
-        try {
-            events.add(clean);
-        } catch (InvalidStatusException e) {
-            // never happens because of AvailabilityRequirement.NONE
-            throw new RuntimeException(e);
-        }
+        events.clean(room, new Admin(getCurrentUser()));
     }
 
     public void render(Screen screen) {

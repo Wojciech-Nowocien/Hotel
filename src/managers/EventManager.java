@@ -1,9 +1,13 @@
 package managers;
 
+import events.AdminEvent;
 import events.Event;
+import events.enums.AdminEventType;
 import events.enums.availability.AvailabilityImpact;
+import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import exceptions.InvalidStatusException;
+import model.Admin;
 import model.Room;
 
 import java.util.ArrayList;
@@ -16,7 +20,7 @@ public class EventManager {
         events = new ArrayList<>();
     }
 
-    public void add(Event event) throws InvalidStatusException{
+    private void add(Event event) throws InvalidStatusException {
         Status status = getLastStatus(event.getRoom());
 
         if (!event.canBeAppliedFor(status)) throw new InvalidStatusException(status, event.getRequirement());
@@ -42,5 +46,17 @@ public class EventManager {
 
     public List<Event> getEventsByRoomNumber(int number) {
         return events.stream().filter(e -> e.getRoom().getNumber() == number).toList();
+    }
+
+    public void clean(Room room, Admin admin) {
+        AdminEvent clean = new AdminEvent(room, admin, AdminEventType.CLEAN,
+                AvailabilityImpact.NONE, AvailabilityRequirement.NONE);
+
+        try {
+            add(clean);
+        } catch (InvalidStatusException e) {
+            // never happens because of AvailabilityRequirement.NONE
+            throw new RuntimeException(e);
+        }
     }
 }
