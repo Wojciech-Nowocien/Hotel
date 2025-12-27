@@ -17,10 +17,12 @@ public class AdminScreen extends Screen {
         System.out.println("Napisz 1, aby dodać nowy pokój.");
         System.out.println("Napisz 2, aby wyświetlić wszystkie pokoje.");
         System.out.println("Napisz 3, aby wyświetlić historię danego pokoju.");
+        System.out.println("Napisz 4, aby zarządzać pokojem.");
         switch (INPUT.nextInt()) {
             case 1 -> addRoom();
             case 2 -> showAllRooms();
             case 3 -> showRoomHistory();
+            case 4 -> manageRoom();
         }
     }
 
@@ -52,6 +54,11 @@ public class AdminScreen extends Screen {
         System.out.println();
     }
 
+    private void handleInvalidRoomNumberException(){
+        System.out.println("\nBłąd: Pokój o wskazanym numerze nie istnieje!");
+        System.out.println("Aby zobaczyć istniejące pokoje wybierz opcję 2 w panelu administratora.\n");
+    }
+
     private void showRoomHistory() {
         System.out.println("Podaj numer pokoju:");
         number = INPUT.nextInt();
@@ -66,8 +73,33 @@ public class AdminScreen extends Screen {
                 System.out.println("Historia tego pokoju jest pusta.");
             }
         } catch (InvalidRoomNumberException e) {
-            System.out.println("\nBłąd: Pokój o wskazanym numerze nie istnieje!");
-            System.out.println("Aby zobaczyć istniejące pokoje wybierz opcję 2 w panelu administratora.\n");
+            handleInvalidRoomNumberException();
+        }
+    }
+
+    private void manageRoom() {
+        boolean shouldContinue = true;
+
+        while (shouldContinue) {
+            System.out.println("Zarządzanie pokojami");
+            System.out.println("Napisz 1, żeby powrócić do panelu administratora");
+            System.out.println("Napisz 2, żeby posprzątać pokój");
+            switch (INPUT.nextInt()) {
+                case 1 -> shouldContinue = false;
+                case 2 -> {
+                    System.out.println("Podaj numer pokoju, który chcesz posprzątać:");
+                    clean(INPUT.nextInt());
+                }
+            }
+        }
+    }
+
+    private void clean(int number){
+        try {
+            hotel.clean(number);
+            System.out.println("\nPomyślnie posprzątano pokój numer " + number + ".\n");
+        } catch (InvalidRoomNumberException e) {
+            handleInvalidRoomNumberException();
         }
     }
 }

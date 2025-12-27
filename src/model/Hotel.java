@@ -1,11 +1,12 @@
 package model;
 
+import events.AdminEvent;
 import events.Event;
+import events.enums.AdminEventType;
+import events.enums.availability.AvailabilityImpact;
+import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
-import exceptions.DuplicateLoginException;
-import exceptions.InvalidPasswordException;
-import exceptions.InvalidRoomNumberException;
-import exceptions.LoginNotFoundException;
+import exceptions.*;
 import managers.EventManager;
 import managers.RoomManager;
 import managers.UserManager;
@@ -61,6 +62,19 @@ public class Hotel {
     public List<Event> getEventsByRoomNumber(int number) throws InvalidRoomNumberException {
         rooms.validate(number);
         return events.getEventsByRoomNumber(number);
+    }
+
+    public void clean(int number) throws InvalidRoomNumberException {
+        Room room = rooms.getRoomByNumber(number);
+        AdminEvent clean = new AdminEvent(room, new Admin(getCurrentUser()), AdminEventType.CLEAN,
+                AvailabilityImpact.NONE, AvailabilityRequirement.NONE);
+
+        try {
+            events.add(clean);
+        } catch (InvalidStatusException e) {
+            // never happens because of AvailabilityRequirement.NONE
+            throw new RuntimeException(e);
+        }
     }
 
     public void render(Screen screen) {

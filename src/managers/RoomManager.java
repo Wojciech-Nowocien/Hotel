@@ -33,4 +33,12 @@ public class RoomManager {
         if (rooms.stream().filter(r -> r.getNumber() == number).toList().isEmpty())
             throw new InvalidRoomNumberException();
     }
+
+    public Room getRoomByNumber(int number) throws InvalidRoomNumberException {
+        var roomsByNumber = rooms.stream().filter(r -> r.getNumber() == number).toList();
+
+        if (roomsByNumber.isEmpty()) throw new InvalidRoomNumberException();
+
+        return roomsByNumber.getFirst();
+    }
 }
