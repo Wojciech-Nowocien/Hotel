@@ -1,6 +1,7 @@
 package model;
 
 import events.Event;
+import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import exceptions.*;
 import managers.EventManager;
@@ -91,6 +92,15 @@ public class Hotel {
         events.book(room, new Client(getCurrentUser()));
     }
 
+    public void cancel(int number) throws InvalidRoomNumberException, InvalidStatusException {
+        Room room = rooms.getRoomByNumber(number);
+        Client client = new Client(getCurrentUser());
+        if (!events.isRoomBookedBy(room, client)) {
+            throw new InvalidStatusException(events.getLastStatus(room), AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+        }
+        events.cancel(room, client);
+    }
+
     public void render(Screen screen) {
         this.screen = screen;
         while (true) {
@@ -98,4 +108,3 @@ public class Hotel {
         }
     }
 }
-

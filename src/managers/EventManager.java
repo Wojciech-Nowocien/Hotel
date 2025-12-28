@@ -132,4 +132,10 @@ public class EventManager {
                 AvailabilityRequirement.REQUIRE_AVAILABLE);
         add(book);
     }
+
+    public void cancel(Room room, Client client) throws InvalidStatusException {
+        ClientRoomEvent cancel = new ClientRoomEvent(room, client, ClientEventType.CANCEL, AvailabilityImpact.AVAILABLE,
+                AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+        add(cancel);
+    }
 }
