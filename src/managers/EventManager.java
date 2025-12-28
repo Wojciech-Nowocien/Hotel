@@ -3,8 +3,10 @@ package managers;
 import events.AdminEvent;
 import events.ClientRoomEvent;
 import events.Event;
+import events.Payment;
 import events.enums.AdminEventType;
 import events.enums.ClientEventType;
+import events.enums.PaymentMethod;
 import events.enums.availability.AvailabilityImpact;
 import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
@@ -86,6 +88,53 @@ public class EventManager {
         return events.stream().filter(e -> e.getRoom().getNumber() == number).toList();
     }
 
+    public boolean isRoomOccupiedBy(Room room, Client client) {
+        var roomEvents = events.stream().filter(e -> e.getRoom().equals(room) && e instanceof ClientRoomEvent).toList();
+        if (roomEvents.isEmpty()) return false;
+        var last = (ClientRoomEvent) roomEvents.getLast();
+        var t = last.getType();
+        if ((t == ClientEventType.BOOK || t == ClientEventType.ARRIVE) && last.getUser().equals(client)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isRoomPaidBy(Room room, Client client) {
+        var roomEvents = events.stream().filter(e -> e.getRoom().equals(room)).toList();
+        if (roomEvents.isEmpty()) return true;
+
+        int lastClientIndex = -1;
+        Object lastClient = null;
+        ClientEventType lastClientType = null;
+        int lastPaymentIndex = -1;
+        Object lastPaymentClient = null;
+
+        for (int i = 0; i < roomEvents.size(); i++) {
+            Event e = roomEvents.get(i);
+            if (e instanceof ClientRoomEvent) {
+                lastClientIndex = i;
+                lastClient = e.getUser();
+                lastClientType = ((ClientRoomEvent) e).getType();
+            } else if (e instanceof Payment) {
+                lastPaymentIndex = i;
+                lastPaymentClient = e.getUser();
+            }
+        }
+
+        if (lastClientIndex == -1) return true;
+
+        if (!(lastClient instanceof Client)) return true;
+
+        if (!lastClient.equals(client)) return true;
+
+        if (lastClientType == ClientEventType.BOOK || lastClientType == ClientEventType.ARRIVE) {
+            if (lastPaymentIndex > lastClientIndex && lastPaymentClient != null && lastPaymentClient.equals(lastClient)) return true;
+            return false;
+        }
+
+        return true;
+    }
+
     public void clean(Room room, Admin admin) {
         AdminEvent clean = new AdminEvent(room, admin, AdminEventType.CLEAN,
                 AvailabilityImpact.NONE, AvailabilityRequirement.NONE);
@@ -135,9 +184,9 @@ public class EventManager {
     }
 
     public void cancel(Room room, Client client) throws InvalidStatusException {
-        if (!isRoomBookedBy(room, client))
+        if (!isRoomBookedBy(room, client)) {
             throw new InvalidStatusException(getLastStatus(room), AvailabilityRequirement.REQUIRE_UNAVAILABLE);
-
+        }
         ClientRoomEvent cancel = new ClientRoomEvent(room, client, ClientEventType.CANCEL, AvailabilityImpact.AVAILABLE,
                 AvailabilityRequirement.REQUIRE_UNAVAILABLE);
         add(cancel);
@@ -179,5 +228,13 @@ public class EventManager {
         ClientRoomEvent arrive = new ClientRoomEvent(room, client, ClientEventType.ARRIVE, AvailabilityImpact.UNAVAILABLE,
                 AvailabilityRequirement.REQUIRE_UNAVAILABLE);
         events.add(arrive);
+    }
+
+    public void pay(Room room, Client client, PaymentMethod method) throws InvalidStatusException {
+        if (!isRoomOccupiedBy(room, client)) {
+            throw new InvalidStatusException(getLastStatus(room), AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+        }
+        Payment payment = new Payment(room, client, method);
+        add(payment);
     }
 }

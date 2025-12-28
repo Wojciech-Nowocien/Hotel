@@ -3,6 +3,7 @@ package screens;
 import exceptions.InvalidRoomNumberException;
 import exceptions.InvalidStatusException;
 import exceptions.AlreadyCheckedInException;
+import events.enums.PaymentMethod;
 import model.Room;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public class ClientScreen extends Screen {
         System.out.println("Napisz 3, aby zobaczyć zarezerwowane pokoje.");
         System.out.println("Napisz 4, aby anulować rezerwację pokoju.");
         System.out.println("Napisz 5, aby zameldować się w zarezerwowanym pokoju.");
+        System.out.println("Napisz 6, aby zobaczyć listę nieopłaconych pokoi.");
+        System.out.println("Napisz 7, aby zapłacić za pokój.");
         switch (INPUT.nextInt()) {
             case 1 -> showAvailableRooms();
             case 2 -> {
@@ -32,6 +35,19 @@ public class ClientScreen extends Screen {
             case 5 -> {
                 System.out.println("Podaj numer pokoju, w którym chcesz się zameldować:");
                 arrive(INPUT.nextInt());
+            }
+            case 6 -> showUnpaidRooms();
+            case 7 -> {
+                System.out.println("Podaj numer pokoju, za który chcesz zapłacić:");
+                int number = INPUT.nextInt();
+                System.out.println("Wybierz metodę płatności: CASH, CARD, BLIK, TRANSFER");
+                try {
+                    PaymentMethod method = PaymentMethod.valueOf(INPUT.nextLine().toUpperCase());
+                    pay(number, method);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("\nBłąd: Niepoprawna metoda płatności!");
+                    System.out.println("Musisz wybrać opcję spośród dostępnych.\n");
+                }
             }
         }
     }
@@ -94,6 +110,22 @@ public class ClientScreen extends Screen {
         }
     }
 
+    private void showUnpaidRooms() {
+        rooms = hotel.getUnpaidRooms();
+
+        if (rooms.isEmpty()) {
+            System.out.println("\nNie masz żadnych należności wobec hotelu.\n");
+            return;
+        }
+
+        System.out.println("\nLista pokoi, które musisz opłacić:");
+        System.out.println("Nr\t\t\t\t\tTyp");
+        for (Room r : rooms) {
+            System.out.println(r.getNumber() + "\t\t\t\t\t" + r.getType());
+        }
+        System.out.println();
+    }
+
     private void arrive(int number) {
         try {
             hotel.arrive(number);
@@ -107,6 +139,21 @@ public class ClientScreen extends Screen {
         } catch (InvalidStatusException e) {
             System.out.println("\nBłąd: Nie możesz się zameldować w tym pokoju, którego nie zarezerwowałeś!");
             System.out.println("Sprawdź listę swoich rezerwacji (opcja 3 w panelu gościa).\n");
+        }
+    }
+
+    private void pay(int number, PaymentMethod method) {
+        try {
+            hotel.pay(number, method);
+            System.out.println("\nPłatność za pokój numer " + number + " zakończyła się pomyślnie.\n");
+        } catch (InvalidRoomNumberException e) {
+            System.out.println("\nBłąd: Pokój o wskazanym numerze nie istnieje!");
+            System.out.println("Sprawdź listę swoich nieopłaconych pokojów.\n");
+        } catch (InvalidStatusException e) {
+            System.out.println("\nBłąd: Nie możesz zapłacić za ten pokój.");
+            System.out.println("Jesteś pewien, że go wynajmujesz lub w nim przebywasz?");
+            System.out.println("Może opłaciłeś go już wcześniej?");
+            System.out.println("Zobacz listę nieopłaconych poki, aby dowiedzieć się więcej (opcja nr. 6 w panelu gościa).\n");
         }
     }
 }

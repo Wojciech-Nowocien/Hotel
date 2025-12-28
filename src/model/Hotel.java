@@ -2,6 +2,7 @@ package model;
 
 import events.Event;
 import events.enums.availability.Status;
+import events.enums.PaymentMethod;
 import exceptions.*;
 import managers.EventManager;
 import managers.RoomManager;
@@ -37,6 +38,12 @@ public class Hotel {
     public List<Room> getBookedRooms() {
         var allRooms = rooms.getRooms();
         return allRooms.stream().filter(r -> events.isRoomBookedBy(r, new Client(getCurrentUser()))).toList();
+    }
+
+    public List<Room> getUnpaidRooms() {
+        var allRooms = rooms.getRooms();
+        Client client = new Client(getCurrentUser());
+        return allRooms.stream().filter(r -> events.isRoomOccupiedBy(r, client) && !events.isRoomPaidBy(r, client)).toList();
     }
 
     public void setScreen(Screen screen) {
@@ -99,6 +106,11 @@ public class Hotel {
     public void arrive(int number) throws InvalidRoomNumberException, InvalidStatusException, AlreadyCheckedInException {
         Room room = rooms.getRoomByNumber(number);
         events.arrive(room, new Client(getCurrentUser()));
+    }
+
+    public void pay(int number, PaymentMethod method) throws InvalidRoomNumberException, InvalidStatusException {
+        Room room = rooms.getRoomByNumber(number);
+        events.pay(room, new Client(getCurrentUser()), method);
     }
 
     public void render(Screen screen) {
