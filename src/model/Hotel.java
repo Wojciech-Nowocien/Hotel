@@ -29,6 +29,11 @@ public class Hotel {
         return rooms.getRooms();
     }
 
+    public List<Room> getAvailableRooms() {
+        var allRooms = rooms.getRooms();
+        return allRooms.stream().filter(r -> events.getLastStatus(r) == Status.AVAILABLE).toList();
+    }
+
     public void setScreen(Screen screen) {
         if (screen != null) {
             this.screen = screen;
