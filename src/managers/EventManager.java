@@ -42,6 +42,29 @@ public class EventManager {
                 .toList();
     }
 
+    private List<ClientRoomEvent> getClientRoomEvents(Client client, Room room) {
+        List<ClientRoomEvent> result = new ArrayList<>();
+
+        events.stream().filter(e -> e.getUser().equals(client)
+                        && e instanceof ClientRoomEvent
+                        && e.getRoom().equals(room)
+                ).
+                forEach(e -> result.add((ClientRoomEvent) e));
+
+        return result;
+    }
+
+    public boolean isRoomBookedBy(Room room, Client client) {
+        var clientEvents = events.stream().filter(e -> e.getUser().equals(client)
+                && e instanceof ClientRoomEvent
+                && e.getRoom().equals(room)
+        ).toList();
+
+        if (clientEvents.isEmpty()) return false;
+
+        return ((ClientRoomEvent) clientEvents.getLast()).getType() == ClientEventType.BOOK;
+    }
+
     public Status getLastStatus(Room room) {
         var roomEvents = events.stream().filter(e ->
                 e.getStatusImpact() != AvailabilityImpact.NONE && e.getRoom().equals(room)

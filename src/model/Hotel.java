@@ -34,6 +34,11 @@ public class Hotel {
         return allRooms.stream().filter(r -> events.getLastStatus(r) == Status.AVAILABLE).toList();
     }
 
+    public List<Room> getBookedRooms() {
+        var allRooms = rooms.getRooms();
+        return allRooms.stream().filter(r -> events.isRoomBookedBy(r, new Client(getCurrentUser()))).toList();
+    }
+
     public void setScreen(Screen screen) {
         if (screen != null) {
             this.screen = screen;
