@@ -11,10 +11,16 @@ import java.util.List;
 
 public class ClientScreen extends Screen {
     private List<Room> rooms;
+    private Room currentRoom;
 
     @Override
     public void render() {
+        currentRoom = hotel.getCurrentRoom();
+
         System.out.println("Panel gościa\n");
+        if (currentRoom != null) {
+            System.out.println("Obecnie jesteś zameldowany w pokoju numer " + currentRoom.getNumber() + ".");
+        }
         System.out.println("Napisz 1, aby wyświetlić listę dostępnych pokoi.");
         System.out.println("Napisz 2, aby zarezerwować pokój.");
         System.out.println("Napisz 3, aby zobaczyć zarezerwowane pokoje.");
@@ -22,7 +28,9 @@ public class ClientScreen extends Screen {
         System.out.println("Napisz 5, aby zameldować się w zarezerwowanym pokoju.");
         System.out.println("Napisz 6, aby zobaczyć listę nieopłaconych pokoi.");
         System.out.println("Napisz 7, aby zapłacić za pokój.");
-        System.out.println("Napisz 8, aby wymeldować się z pokoju.");
+        if (currentRoom != null) {
+            System.out.println("Napisz 8, aby wymeldować się z pokoju.");
+        }
         switch (INPUT.nextInt()) {
             case 1 -> showAvailableRooms();
             case 2 -> {
@@ -52,8 +60,11 @@ public class ClientScreen extends Screen {
                 }
             }
             case 8 -> {
-                System.out.println("Podaj numer pokoju, z którego chcesz się wymeldować:");
-                leave(INPUT.nextInt());
+                if (currentRoom != null) {
+                    leave(currentRoom.getNumber());
+                } else {
+                    System.out.println("\nBłąd: Nie możesz się wymeldować, ponieważ nie jesteś zameldowany w żadnym pokoju!\n");
+                }
             }
         }
     }

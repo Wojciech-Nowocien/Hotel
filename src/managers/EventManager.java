@@ -19,7 +19,9 @@ import model.Client;
 import model.Room;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventManager {
     private final ArrayList<Event> events;
@@ -275,5 +277,24 @@ public class EventManager {
         ClientRoomEvent leave = new ClientRoomEvent(room, client, ClientEventType.LEAVE, AvailabilityImpact.AVAILABLE,
                 AvailabilityRequirement.REQUIRE_UNAVAILABLE);
         add(leave);
+    }
+
+    public Room getClientCurrentRoom(Client client) {
+        Map<Room, ClientRoomEvent> lastClientEventByRoom = new HashMap<>();
+
+        for (Event e : events) {
+            if (e instanceof ClientRoomEvent) {
+                lastClientEventByRoom.put(e.getRoom(), (ClientRoomEvent) e);
+            }
+        }
+
+        for (Map.Entry<Room, ClientRoomEvent> entry : lastClientEventByRoom.entrySet()) {
+            ClientRoomEvent cre = entry.getValue();
+            if (cre.getType() == ClientEventType.ARRIVE && cre.getUser().equals(client)) {
+                return entry.getKey();
+            }
+        }
+
+        return null;
     }
 }

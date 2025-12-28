@@ -118,6 +118,10 @@ public class Hotel {
         events.leave(room, new Client(getCurrentUser()));
     }
 
+    public Room getCurrentRoom() {
+        return events.getClientCurrentRoom(new Client(getCurrentUser()));
+    }
+
     public void render(Screen screen) {
         this.screen = screen;
         while (true) {
