@@ -113,6 +113,11 @@ public class Hotel {
         events.pay(room, new Client(getCurrentUser()), method);
     }
 
+    public void leave(int number) throws InvalidRoomNumberException, InvalidStatusException, RoomNotPaidException {
+        Room room = rooms.getRoomByNumber(number);
+        events.leave(room, new Client(getCurrentUser()));
+    }
+
     public void render(Screen screen) {
         this.screen = screen;
         while (true) {

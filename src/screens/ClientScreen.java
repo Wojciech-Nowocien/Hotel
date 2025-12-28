@@ -3,6 +3,7 @@ package screens;
 import exceptions.InvalidRoomNumberException;
 import exceptions.InvalidStatusException;
 import exceptions.AlreadyCheckedInException;
+import exceptions.RoomNotPaidException;
 import events.enums.PaymentMethod;
 import model.Room;
 
@@ -21,6 +22,7 @@ public class ClientScreen extends Screen {
         System.out.println("Napisz 5, aby zameldować się w zarezerwowanym pokoju.");
         System.out.println("Napisz 6, aby zobaczyć listę nieopłaconych pokoi.");
         System.out.println("Napisz 7, aby zapłacić za pokój.");
+        System.out.println("Napisz 8, aby wymeldować się z pokoju.");
         switch (INPUT.nextInt()) {
             case 1 -> showAvailableRooms();
             case 2 -> {
@@ -48,6 +50,10 @@ public class ClientScreen extends Screen {
                     System.out.println("\nBłąd: Niepoprawna metoda płatności!");
                     System.out.println("Musisz wybrać opcję spośród dostępnych.\n");
                 }
+            }
+            case 8 -> {
+                System.out.println("Podaj numer pokoju, z którego chcesz się wymeldować:");
+                leave(INPUT.nextInt());
             }
         }
     }
@@ -154,6 +160,22 @@ public class ClientScreen extends Screen {
             System.out.println("Jesteś pewien, że go wynajmujesz lub w nim przebywasz?");
             System.out.println("Może opłaciłeś go już wcześniej?");
             System.out.println("Zobacz listę nieopłaconych poki, aby dowiedzieć się więcej (opcja nr. 6 w panelu gościa).\n");
+        }
+    }
+
+    private void leave(int number) {
+        try {
+            hotel.leave(number);
+            System.out.println("\nPomyślnie wymeldowano z pokoju numer " + number + ".\n");
+        } catch (InvalidRoomNumberException e) {
+            System.out.println("\nBłąd: Pokój o wskazanym numerze nie istnieje!");
+            System.out.println("Sprawdź listę swoich rezerwacji.\n");
+        } catch (RoomNotPaidException e) {
+            System.out.println("\nBłąd: Nie możesz się wymeldować przed opłaceniem pokoju!");
+            System.out.println("Najpierw opłać pokój (opcja nr. 7 w panelu gościa), a dopiero potem się wymelduj.\n");
+        } catch (InvalidStatusException e) {
+            System.out.println("\nBłąd: Nie możesz opuścić pokoju, w którym Cię nie ma!");
+            System.out.println("Wybierz właściwy pokój.\n");
         }
     }
 }

@@ -13,6 +13,7 @@ import events.enums.availability.Status;
 import exceptions.InvalidStatusException;
 import exceptions.RenovationException;
 import exceptions.AlreadyCheckedInException;
+import exceptions.RoomNotPaidException;
 import model.Admin;
 import model.Client;
 import model.Room;
@@ -93,46 +94,50 @@ public class EventManager {
         if (roomEvents.isEmpty()) return false;
         var last = (ClientRoomEvent) roomEvents.getLast();
         var t = last.getType();
-        if ((t == ClientEventType.BOOK || t == ClientEventType.ARRIVE) && last.getUser().equals(client)) {
-            return true;
-        }
-        return false;
+        return (t == ClientEventType.BOOK || t == ClientEventType.ARRIVE) && last.getUser().equals(client);
     }
 
     public boolean isRoomPaidBy(Room room, Client client) {
         var roomEvents = events.stream().filter(e -> e.getRoom().equals(room)).toList();
         if (roomEvents.isEmpty()) return true;
 
-        int lastClientIndex = -1;
-        Object lastClient = null;
-        ClientEventType lastClientType = null;
-        int lastPaymentIndex = -1;
-        Object lastPaymentClient = null;
-
+        int lastLeaveOrCancelIndex = -1;
         for (int i = 0; i < roomEvents.size(); i++) {
             Event e = roomEvents.get(i);
-            if (e instanceof ClientRoomEvent) {
-                lastClientIndex = i;
-                lastClient = e.getUser();
-                lastClientType = ((ClientRoomEvent) e).getType();
-            } else if (e instanceof Payment) {
-                lastPaymentIndex = i;
-                lastPaymentClient = e.getUser();
+            if (e instanceof ClientRoomEvent event) {
+                if (event.getType() == ClientEventType.LEAVE || event.getType() == ClientEventType.CANCEL) {
+                    lastLeaveOrCancelIndex = i;
+                }
             }
         }
 
-        if (lastClientIndex == -1) return true;
-
-        if (!(lastClient instanceof Client)) return true;
-
-        if (!lastClient.equals(client)) return true;
-
-        if (lastClientType == ClientEventType.BOOK || lastClientType == ClientEventType.ARRIVE) {
-            if (lastPaymentIndex > lastClientIndex && lastPaymentClient != null && lastPaymentClient.equals(lastClient)) return true;
-            return false;
+        int sessionStartIndex = -1;
+        for (int i = lastLeaveOrCancelIndex + 1; i < roomEvents.size(); i++) {
+            Event e = roomEvents.get(i);
+            if (e instanceof ClientRoomEvent event) {
+                if (event.getType() == ClientEventType.BOOK || event.getType() == ClientEventType.ARRIVE) {
+                    if (event.getUser().equals(client)) {
+                        sessionStartIndex = i;
+                        break;
+                    } else {
+                        return true;
+                    }
+                }
+            }
         }
 
-        return true;
+        if (sessionStartIndex == -1) return true;
+
+        for (int i = sessionStartIndex; i < roomEvents.size(); i++) {
+            Event e = roomEvents.get(i);
+            if (e instanceof Payment && e.getUser().equals(client)) return true;
+            if (e instanceof ClientRoomEvent event) {
+                if (event.getType() == ClientEventType.LEAVE || event.getType() == ClientEventType.CANCEL) break;
+                if (!event.getUser().equals(client) && (event.getType() == ClientEventType.BOOK || event.getType() == ClientEventType.ARRIVE)) break;
+            }
+        }
+
+        return false;
     }
 
     public void clean(Room room, Admin admin) {
@@ -236,5 +241,39 @@ public class EventManager {
         }
         Payment payment = new Payment(room, client, method);
         add(payment);
+    }
+
+    public void leave(Room room, Client client) throws InvalidStatusException, RoomNotPaidException {
+        var roomEvents = events.stream().filter(e -> e.getRoom().equals(room)).toList();
+        if (roomEvents.isEmpty()) {
+            throw new InvalidStatusException(getLastStatus(room), AvailabilityRequirement.REQUIRE_AVAILABLE);
+        }
+
+        int lastClientIndex = -1;
+        Event lastClientEvent = null;
+        for (int i = 0; i < roomEvents.size(); i++) {
+            Event e = roomEvents.get(i);
+            if (e instanceof ClientRoomEvent) {
+                lastClientIndex = i;
+                lastClientEvent = e;
+            }
+        }
+
+        if (lastClientIndex == -1) {
+            throw new InvalidStatusException(getLastStatus(room), AvailabilityRequirement.REQUIRE_AVAILABLE);
+        }
+
+        ClientRoomEvent cre = (ClientRoomEvent) lastClientEvent;
+        if (cre.getType() != ClientEventType.ARRIVE || !cre.getUser().equals(client)) {
+            throw new InvalidStatusException(getLastStatus(room), AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+        }
+
+        if (!isRoomPaidBy(room, client)) {
+            throw new RoomNotPaidException();
+        }
+
+        ClientRoomEvent leave = new ClientRoomEvent(room, client, ClientEventType.LEAVE, AvailabilityImpact.AVAILABLE,
+                AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+        add(leave);
     }
 }
