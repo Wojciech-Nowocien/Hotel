@@ -3,7 +3,7 @@ package util;
 import java.util.Scanner;
 
 public class BetterScanner {
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public BetterScanner() {
         scanner = new Scanner(System.in);

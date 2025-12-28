@@ -4,7 +4,6 @@ import events.enums.availability.AvailabilityImpact;
 import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import model.Admin;
-import model.Client;
 import model.Room;
 import model.User;
 
@@ -23,10 +22,6 @@ public abstract class Event {
 
     public User getUser() {
         return user;
-    }
-
-    public boolean isExecutorClient() {
-        return user instanceof Client;
     }
 
     public boolean isExecutorAdmin() {
@@ -53,8 +48,8 @@ public abstract class Event {
         String name = String.format("%-26s", getMessage());
         String executor = String.format("%-18s", getUser().toString());
         String role = isExecutorAdmin() ? String.format("%-15s", "administrator") : String.format("%-15s", "gość");
-        String roomNumber = String.format("%-16s", room.getNumber());
-        String roomType = String.format("%-16s", room.getType());
+        String roomNumber = String.format("%-16s", room.number());
+        String roomType = String.format("%-16s", room.type());
         String info = "";
 
         return name + executor + role + roomNumber + roomType + info;

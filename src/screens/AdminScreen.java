@@ -41,7 +41,7 @@ public class AdminScreen extends Screen {
         try {
             RoomType type = RoomType.valueOf(INPUT.nextLine().toUpperCase());
             Room r = hotel.add(type);
-            System.out.println("\nNowy pokój typu " + r.getType() + " jest dostępny pod numerem " + r.getNumber() + ".\n");
+            System.out.println("\nNowy pokój typu " + r.type() + " jest dostępny pod numerem " + r.number() + ".\n");
         } catch (IllegalArgumentException e) {
             System.out.println("\nBłąd: Niepoprawny rodzaj pokoju!\n");
         }
@@ -57,7 +57,7 @@ public class AdminScreen extends Screen {
 
         System.out.println("Nr\t\t\t\tTyp\t\t\t\t\tStatus");
         for (Room r : hotel.getRooms()) {
-            System.out.println(r.getNumber() + "\t\t\t\t" + r.getType() + "\t\t\t" + hotel.getLastStatus(r));
+            System.out.println(r.number() + "\t\t\t\t" + r.type() + "\t\t\t" + hotel.getLastStatus(r));
         }
         System.out.println();
     }

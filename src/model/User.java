@@ -51,8 +51,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (!(o instanceof User)) return false;
-        User other = (User) o;
+        if (!(o instanceof User other)) return false;
         return Objects.equals(login, other.login);
     }
 

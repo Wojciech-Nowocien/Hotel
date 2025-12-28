@@ -24,7 +24,7 @@ public class UserManager {
         var usersWithSameLogin = users.stream().filter(u -> u.getLogin().equals(user.getLogin())).toList();
 
         if (!usersWithSameLogin.isEmpty()) {
-            throw new DuplicateLoginException(user.getLogin());
+            throw new DuplicateLoginException();
         }
 
         users.add(user);
@@ -41,7 +41,7 @@ public class UserManager {
         User user = usersToLogin.getFirst();
 
         if (!user.login(password)) {
-            throw new InvalidPasswordException(login, password);
+            throw new InvalidPasswordException();
         }
 
         currentUser = user;

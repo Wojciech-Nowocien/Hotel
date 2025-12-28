@@ -19,7 +19,7 @@ public class ClientScreen extends Screen {
 
         System.out.println("Panel gościa\n");
         if (currentRoom != null) {
-            System.out.println("Obecnie jesteś zameldowany w pokoju numer " + currentRoom.getNumber() + ".");
+            System.out.println("Obecnie jesteś zameldowany w pokoju numer " + currentRoom.number() + ".");
         }
         System.out.println("Napisz 1, aby wyświetlić listę dostępnych pokoi.");
         System.out.println("Napisz 2, aby zarezerwować pokój.");
@@ -51,7 +51,7 @@ public class ClientScreen extends Screen {
             case 7 -> {
                 System.out.println("\nPodaj numer pokoju, za który chcesz zapłacić:");
                 int number = INPUT.nextInt();
-                System.out.println("Wybierz metodę płatności: CASH, CARD, BLIK, TRANSFER");
+                System.out.println("Wybierz jedną z metod płatności: cash, card, blik, transfer (wielkość liter nie ma znaczenia).");
                 try {
                     PaymentMethod method = PaymentMethod.valueOf(INPUT.nextLine().toUpperCase());
                     pay(number, method);
@@ -66,7 +66,7 @@ public class ClientScreen extends Screen {
             }
             case 9 -> {
                 if (currentRoom != null) {
-                    leave(currentRoom.getNumber());
+                    leave(currentRoom.number());
                 } else {
                     System.out.println("\nBłąd: Nie możesz się wymeldować, ponieważ nie jesteś zameldowany w żadnym pokoju!\n");
                 }
@@ -86,7 +86,7 @@ public class ClientScreen extends Screen {
         System.out.println("\nLista dostępnych pokoi:");
         System.out.println("Nr\t\t\t\t\tTyp");
         for (Room r : rooms) {
-            System.out.println(r.getNumber() + "\t\t\t\t\t" + r.getType());
+            System.out.println(r.number() + "\t\t\t\t\t" + r.type());
         }
         System.out.println();
     }
@@ -115,7 +115,7 @@ public class ClientScreen extends Screen {
         System.out.println("\nLista zarezerwowanych przez Ciebie pokoi:");
         System.out.println("Nr\t\t\t\t\tTyp");
         for (Room r : rooms) {
-            System.out.println(r.getNumber() + "\t\t\t\t\t" + r.getType());
+            System.out.println(r.number() + "\t\t\t\t\t" + r.type());
         }
         System.out.println();
     }
@@ -144,7 +144,7 @@ public class ClientScreen extends Screen {
         System.out.println("\nLista pokoi, które musisz opłacić:");
         System.out.println("Nr\t\t\t\t\tTyp");
         for (Room r : rooms) {
-            System.out.println(r.getNumber() + "\t\t\t\t\t" + r.getType());
+            System.out.println(r.number() + "\t\t\t\t\t" + r.type());
         }
         System.out.println();
     }

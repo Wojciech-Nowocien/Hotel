@@ -21,7 +21,7 @@ public class RoomManager {
         int number = 1;
 
         if (!rooms.isEmpty()) {
-            number = rooms.getLast().getNumber() + 1;
+            number = rooms.getLast().number() + 1;
         }
 
         Room room = new Room(number, type);
@@ -30,12 +30,12 @@ public class RoomManager {
     }
 
     public void validate(int number) throws InvalidRoomNumberException {
-        if (rooms.stream().filter(r -> r.getNumber() == number).toList().isEmpty())
+        if (rooms.stream().filter(r -> r.number() == number).toList().isEmpty())
             throw new InvalidRoomNumberException();
     }
 
     public Room getRoomByNumber(int number) throws InvalidRoomNumberException {
-        var roomsByNumber = rooms.stream().filter(r -> r.getNumber() == number).toList();
+        var roomsByNumber = rooms.stream().filter(r -> r.number() == number).toList();
 
         if (roomsByNumber.isEmpty()) throw new InvalidRoomNumberException();
 

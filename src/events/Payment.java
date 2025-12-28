@@ -14,10 +14,6 @@ public class Payment extends Event{
         this.paymentMethod = paymentMethod;
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
     @Override
     public AvailabilityImpact getStatusImpact() {
         return AvailabilityImpact.NONE;

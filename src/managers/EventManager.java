@@ -48,18 +48,6 @@ public class EventManager {
                 .toList();
     }
 
-    private List<ClientRoomEvent> getClientRoomEvents(Client client, Room room) {
-        List<ClientRoomEvent> result = new ArrayList<>();
-
-        events.stream().filter(e -> e.getUser().equals(client)
-                        && e instanceof ClientRoomEvent
-                        && e.getRoom().equals(room)
-                ).
-                forEach(e -> result.add((ClientRoomEvent) e));
-
-        return result;
-    }
-
     public boolean isRoomBookedBy(Room room, Client client) {
         var clientEvents = events.stream().filter(e -> e.getUser().equals(client)
                 && e instanceof ClientRoomEvent
@@ -88,7 +76,7 @@ public class EventManager {
     }
 
     public List<Event> getEventsByRoomNumber(int number) {
-        return events.stream().filter(e -> e.getRoom().getNumber() == number).toList();
+        return events.stream().filter(e -> e.getRoom().number() == number).toList();
     }
 
     public boolean isRoomOccupiedBy(Room room, Client client) {
