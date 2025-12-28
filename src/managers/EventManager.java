@@ -10,6 +10,7 @@ import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import exceptions.InvalidStatusException;
 import exceptions.RenovationException;
+import exceptions.AlreadyCheckedInException;
 import model.Admin;
 import model.Client;
 import model.Room;
@@ -137,5 +138,43 @@ public class EventManager {
         ClientRoomEvent cancel = new ClientRoomEvent(room, client, ClientEventType.CANCEL, AvailabilityImpact.AVAILABLE,
                 AvailabilityRequirement.REQUIRE_UNAVAILABLE);
         add(cancel);
+    }
+
+    public boolean isClientCheckedIn(Client client) {
+        var allClientEvents = events.stream().filter(e -> e.getUser().equals(client)
+                && e instanceof ClientRoomEvent).toList();
+
+        if (allClientEvents.isEmpty()) return false;
+
+        var roomsWithEvents = allClientEvents.stream()
+                .map(Event::getRoom)
+                .distinct()
+                .toList();
+
+        for (Room room : roomsWithEvents) {
+            var lastRoomEvent = allClientEvents.stream()
+                    .filter(e -> e.getRoom().equals(room))
+                    .toList()
+                    .getLast();
+
+            if (lastRoomEvent instanceof ClientRoomEvent &&
+                    ((ClientRoomEvent) lastRoomEvent).getType() == ClientEventType.ARRIVE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void arrive(Room room, Client client) throws InvalidStatusException, AlreadyCheckedInException {
+        if (!isRoomBookedBy(room, client))
+            throw new InvalidStatusException(getLastStatus(room), AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+
+        if (isClientCheckedIn(client))
+            throw new AlreadyCheckedInException();
+
+        ClientRoomEvent arrive = new ClientRoomEvent(room, client, ClientEventType.ARRIVE, AvailabilityImpact.UNAVAILABLE,
+                AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+        events.add(arrive);
     }
 }

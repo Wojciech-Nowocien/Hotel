@@ -101,6 +101,11 @@ public class Hotel {
         events.cancel(room, client);
     }
 
+    public void arrive(int number) throws InvalidRoomNumberException, InvalidStatusException, AlreadyCheckedInException {
+        Room room = rooms.getRoomByNumber(number);
+        events.arrive(room, new Client(getCurrentUser()));
+    }
+
     public void render(Screen screen) {
         this.screen = screen;
         while (true) {
