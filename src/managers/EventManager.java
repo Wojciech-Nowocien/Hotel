@@ -34,7 +34,7 @@ public class EventManager {
 
     private List<Event> getRoomRenovationEvents(Room room) {
         return events.stream().filter(e ->
-                        e.getRoom() == room
+                        e.getRoom().equals(room)
                                 && e.isExecutorAdmin()
                                 && e instanceof AdminEvent
                                 && (((AdminEvent) e).getType() == AdminEventType.START_RENOVATION
