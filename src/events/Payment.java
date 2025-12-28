@@ -32,4 +32,11 @@ public class Payment extends Event{
     public String getMessage() {
         return "opłacono";
     }
+
+    @Override
+    public String toString() {
+        String string = super.toString();
+        string += "     " + paymentMethod;
+        return string;
+    }
 }

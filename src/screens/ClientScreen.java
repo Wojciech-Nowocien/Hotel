@@ -35,21 +35,21 @@ public class ClientScreen extends Screen {
         switch (INPUT.nextInt()) {
             case 1 -> showAvailableRooms();
             case 2 -> {
-                System.out.println("Podaj numer pokoju, który chcesz zarezerwować:");
+                System.out.println("\nPodaj numer pokoju, który chcesz zarezerwować:");
                 book(INPUT.nextInt());
             }
             case 3 -> showBookedRooms();
             case 4 -> {
-                System.out.println("Podaj numer pokoju, którego rezerwację chcesz anulować:");
+                System.out.println("\nPodaj numer pokoju, którego rezerwację chcesz anulować:");
                 cancel(INPUT.nextInt());
             }
             case 5 -> {
-                System.out.println("Podaj numer pokoju, w którym chcesz się zameldować:");
+                System.out.println("\nPodaj numer pokoju, w którym chcesz się zameldować:");
                 arrive(INPUT.nextInt());
             }
             case 6 -> showUnpaidRooms();
             case 7 -> {
-                System.out.println("Podaj numer pokoju, za który chcesz zapłacić:");
+                System.out.println("\nPodaj numer pokoju, za który chcesz zapłacić:");
                 int number = INPUT.nextInt();
                 System.out.println("Wybierz metodę płatności: CASH, CARD, BLIK, TRANSFER");
                 try {
@@ -71,6 +71,7 @@ public class ClientScreen extends Screen {
                     System.out.println("\nBłąd: Nie możesz się wymeldować, ponieważ nie jesteś zameldowany w żadnym pokoju!\n");
                 }
             }
+            default -> System.out.println();
         }
     }
 

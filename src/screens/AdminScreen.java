@@ -30,17 +30,18 @@ public class AdminScreen extends Screen {
                 System.out.println("\nDziękujemy za korzystanie z panelu administratora. Do zobaczenia!\n");
                 changeScreen(new WelcomeScreen());
             }
+            default -> System.out.println();
         }
     }
 
     private void addRoom() {
-        System.out.println("Dodaj pokój\n");
+        System.out.println("\nDodaj pokój\n");
         System.out.println("Dostępne rodzaje pokojów to: single, double, apartment");
         System.out.println("Podaj rodzaj pokoju (wielkość liter nie ma znaczenia):");
         try {
             RoomType type = RoomType.valueOf(INPUT.nextLine().toUpperCase());
             Room r = hotel.add(type);
-            System.out.println("Nowy pokój typu " + r.getType() + " jest dostępny pod numerem " + r.getNumber() + ".\n");
+            System.out.println("\nNowy pokój typu " + r.getType() + " jest dostępny pod numerem " + r.getNumber() + ".\n");
         } catch (IllegalArgumentException e) {
             System.out.println("\nBłąd: Niepoprawny rodzaj pokoju!\n");
         }
@@ -48,11 +49,11 @@ public class AdminScreen extends Screen {
 
     private void showAllRooms() {
         if (hotel.getRooms().isEmpty()) {
-            System.out.println("Obecnie hotel nie ma żadnych pokoi!\n");
+            System.out.println("\nObecnie hotel nie ma żadnych pokoi!\n");
             return;
         }
 
-        System.out.println("Lista pokoi:");
+        System.out.println("\nLista pokoi:\n");
 
         System.out.println("Nr\t\t\t\tTyp\t\t\t\t\tStatus");
         for (Room r : hotel.getRooms()) {
@@ -67,17 +68,19 @@ public class AdminScreen extends Screen {
     }
 
     private void showRoomHistory() {
-        System.out.println("Podaj numer pokoju:");
+        System.out.println("\nPodaj numer pokoju:");
         number = INPUT.nextInt();
         try {
             events = hotel.getEventsByRoomNumber(number);
             if (!events.isEmpty()) {
-                System.out.println("Nazwa\t\t\tWykonawca\t\tRola wyk.\t\t\tNr. pokoju\t\t\tTyp pokoju\t\t\tDodatkowe informacje");
+                System.out.println();
+                System.out.println("Nazwa                     Wykonawca         Rola           Nr. pokoju       Typ pokoju       Dodatkowe informacje");
                 for (Event event : events) {
                     System.out.println(event);
                 }
+                System.out.println();
             } else {
-                System.out.println("Historia tego pokoju jest pusta.");
+                System.out.println("\nHistoria tego pokoju jest pusta.\n");
             }
         } catch (InvalidRoomNumberException e) {
             handleInvalidRoomNumberException();
@@ -103,7 +106,7 @@ public class AdminScreen extends Screen {
                     System.out.println("Podaj numer pokoju, który chcesz wyremontować:");
                     startRenovation(INPUT.nextInt());
                 }
-                case 4 ->{
+                case 4 -> {
                     System.out.println("Podaj numer pokoju, w którym remont ma się zakończyć:");
                     endRenovation(INPUT.nextInt());
                 }

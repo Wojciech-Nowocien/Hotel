@@ -49,16 +49,14 @@ public abstract class Event {
 
     @Override
     public String toString() {
-        String message = getMessage() + "\t\t\t" + user + "\t\t\t";
 
-        if (isExecutorAdmin()) {
-            message += "administrator";
-        } else {
-            message += "gość";
-        }
+        String name = String.format("%-26s", getMessage());
+        String executor = String.format("%-18s", getUser().toString());
+        String role = isExecutorAdmin() ? String.format("%-15s", "administrator") : String.format("%-15s", "gość");
+        String roomNumber = String.format("%-16s", room.getNumber());
+        String roomType = String.format("%-16s", room.getType());
+        String info = "";
 
-        message += "\t\t\t" + room.getNumber() + "\t\t\t" + room.getType();
-
-        return message;
+        return name + executor + role + roomNumber + roomType + info;
     }
 }
