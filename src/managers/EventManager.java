@@ -135,6 +135,9 @@ public class EventManager {
     }
 
     public void cancel(Room room, Client client) throws InvalidStatusException {
+        if (!isRoomBookedBy(room, client))
+            throw new InvalidStatusException(getLastStatus(room), AvailabilityRequirement.REQUIRE_UNAVAILABLE);
+
         ClientRoomEvent cancel = new ClientRoomEvent(room, client, ClientEventType.CANCEL, AvailabilityImpact.AVAILABLE,
                 AvailabilityRequirement.REQUIRE_UNAVAILABLE);
         add(cancel);
