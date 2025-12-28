@@ -1,14 +1,17 @@
 package managers;
 
 import events.AdminEvent;
+import events.ClientRoomEvent;
 import events.Event;
 import events.enums.AdminEventType;
+import events.enums.ClientEventType;
 import events.enums.availability.AvailabilityImpact;
 import events.enums.availability.AvailabilityRequirement;
 import events.enums.availability.Status;
 import exceptions.InvalidStatusException;
 import exceptions.RenovationException;
 import model.Admin;
+import model.Client;
 import model.Room;
 
 import java.util.ArrayList;
@@ -99,5 +102,11 @@ public class EventManager {
         }
 
         events.add(renovation);
+    }
+
+    public void book(Room room, Client client) throws InvalidStatusException {
+        ClientRoomEvent book = new ClientRoomEvent(room, client, ClientEventType.BOOK, AvailabilityImpact.UNAVAILABLE,
+                AvailabilityRequirement.REQUIRE_AVAILABLE);
+        add(book);
     }
 }

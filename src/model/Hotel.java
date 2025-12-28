@@ -81,6 +81,11 @@ public class Hotel {
         events.endRenovation(room, new Admin(getCurrentUser()));
     }
 
+    public void book(int number) throws InvalidRoomNumberException, InvalidStatusException {
+        Room room = rooms.getRoomByNumber(number);
+        events.book(room, new Client(getCurrentUser()));
+    }
+
     public void render(Screen screen) {
         this.screen = screen;
         while (true) {
