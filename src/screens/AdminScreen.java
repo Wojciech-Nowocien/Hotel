@@ -20,11 +20,16 @@ public class AdminScreen extends Screen {
         System.out.println("Napisz 2, aby wyświetlić wszystkie pokoje.");
         System.out.println("Napisz 3, aby wyświetlić historię danego pokoju.");
         System.out.println("Napisz 4, aby zarządzać pokojem.");
+        System.out.println("Napisz 6, aby się wylogować.");
         switch (INPUT.nextInt()) {
             case 1 -> addRoom();
             case 2 -> showAllRooms();
             case 3 -> showRoomHistory();
             case 4 -> manageRoom();
+            case 6 -> {
+                System.out.println("\nDziękujemy za korzystanie z panelu administratora. Do zobaczenia!\n");
+                changeScreen(new WelcomeScreen());
+            }
         }
     }
 

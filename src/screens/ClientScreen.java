@@ -28,8 +28,9 @@ public class ClientScreen extends Screen {
         System.out.println("Napisz 5, aby zameldować się w zarezerwowanym pokoju.");
         System.out.println("Napisz 6, aby zobaczyć listę nieopłaconych pokoi.");
         System.out.println("Napisz 7, aby zapłacić za pokój.");
+        System.out.println("Napisz 8, aby się wylogować.");
         if (currentRoom != null) {
-            System.out.println("Napisz 8, aby wymeldować się z pokoju.");
+            System.out.println("Napisz 9, aby wymeldować się z pokoju.");
         }
         switch (INPUT.nextInt()) {
             case 1 -> showAvailableRooms();
@@ -60,6 +61,10 @@ public class ClientScreen extends Screen {
                 }
             }
             case 8 -> {
+                System.out.println("\nDziękujemy za korzystanie z usług Hotelu. Zapraszamy ponownie!\n");
+                changeScreen(new WelcomeScreen());
+            }
+            case 9 -> {
                 if (currentRoom != null) {
                     leave(currentRoom.getNumber());
                 } else {
@@ -131,7 +136,7 @@ public class ClientScreen extends Screen {
         rooms = hotel.getUnpaidRooms();
 
         if (rooms.isEmpty()) {
-            System.out.println("\nNie masz żadnych należności wobec hotelu.\n");
+            System.out.println("\nNie masz żadnych należności wobec Hotelu.\n");
             return;
         }
 
